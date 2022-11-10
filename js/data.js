@@ -1,5 +1,11 @@
 const USERS_PUBLISHED_PHOTO = 25;
 
+const SIZE_SCALE_SETTINGS = {
+  min: 25,
+  max: 100,
+  step: 25,
+};
+
 const PHOTOS_DESCRIPTIONS = [
   'Всем продуктивного дня',
   'На отдыхе',
@@ -69,5 +75,6 @@ export {
   USERS_PUBLISHED_PHOTO,
   PHOTOS_DESCRIPTIONS,
   COMMENTS,
-  USERS_NAMES
+  USERS_NAMES,
+  SIZE_SCALE_SETTINGS
 };
