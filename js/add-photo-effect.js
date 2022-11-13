@@ -1,69 +1,4 @@
-const PHOTO_EFFECTS_SETTINGS = {
-  chrome: {
-    filter: 'grayscale',
-    unit: '',
-    options: {
-      range: {
-        min: 0,
-        max: 1
-      },
-      start: 1,
-      step: 0.1
-    }
-  },
-
-  sepia: {
-    filter: 'sepia',
-    unit: '',
-    options: {
-      range: {
-        min: 0,
-        max: 1
-      },
-      start: 1,
-      step: 0.1
-    }
-  },
-
-  marvin: {
-    filter: 'invert',
-    unit: '%',
-    options: {
-      range: {
-        min: 0,
-        max: 100
-      },
-      start: 100,
-      step: 1
-    }
-  },
-
-  phobos: {
-    filter: 'blur',
-    unit: 'px',
-    options: {
-      range: {
-        min: 0,
-        max: 3
-      },
-      start: 3,
-      step: 0.1
-    }
-  },
-
-  heat: {
-    filter: 'brightness',
-    unit: '',
-    options: {
-      range: {
-        min: 1,
-        max: 3
-      },
-      start: 3,
-      step: 0.1
-    }
-  }
-};
+import { PHOTO_EFFECTS_SETTINGS } from './data.js';
 
 const uploadedPhoto = document.querySelector('.img-upload__preview img');
 const effectsList = document.querySelector('.effects__list');
@@ -89,17 +24,19 @@ const resetPhotoEffects = () => {
   effectLevelValue.value = '';
 };
 
-const photoEffectHandler = (evt) => {
-  const selectedEffect = evt.target.value;
+const addPhotoEffects = ({effect, options}) => {
+  effectLevelSlider.removeAttribute('disabled');
+  effectLevelSliderContainer.classList.remove('hidden');
+  uploadedPhoto.className = 'img-upload__preview';
+  uploadedPhoto.classList.add(`effects__preview--${effect}`);
+  effectLevelSlider.noUiSlider.updateOptions(options);
+};
 
-  if (selectedEffect === 'none') {
+const photoEffectHandler = (evt) => {
+  if (evt.target.value === 'none') {
     resetPhotoEffects();
   } else {
-    effectLevelSlider.removeAttribute('disabled');
-    effectLevelSliderContainer.classList.remove('hidden');
-    uploadedPhoto.className = 'img-upload__preview';
-    uploadedPhoto.classList.add(`effects__preview--${selectedEffect}`);
-    effectLevelSlider.noUiSlider.updateOptions(PHOTO_EFFECTS_SETTINGS[selectedEffect].options);
+    addPhotoEffects(PHOTO_EFFECTS_SETTINGS[evt.target.value]);
   }
 };
 
