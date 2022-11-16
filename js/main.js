@@ -1,6 +1,8 @@
-import { publishedPhotos } from './create-photo-description.js';
 import { renderingMiniature } from './rendering-miniatures.js';
-import { openPhotoUploadForm } from './form.js';
+import { setUserFormSubmit, closeUploadForm } from './form.js';
+import { getDataPhotosList } from './api.js';
+import './add-photo-effect.js';
+import './upload-new-photo.js';
 
-renderingMiniature(publishedPhotos);
-openPhotoUploadForm();
+getDataPhotosList(renderingMiniature);
+setUserFormSubmit(closeUploadForm);

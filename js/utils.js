@@ -1,33 +1,37 @@
-// Генерация рандомного числа из заданного диапозона
-function getRandomNumber (min, max) {
-  if(min < 0 || max < 0) {
-    throw new Error('Некорректный диапазон чисел. Введите диапазон положительных целых чисел(в т.ч. 0)');
-  }
-
-  const lowerCount = Math.ceil(Math.min(min, max));
-  const upperCount = Math.floor(Math.max(min, max));
-
-  const result = Math.random() * (upperCount - lowerCount + 1) + lowerCount;
-
-  return Math.floor(result);
-}
-
-// Проверка на максимальное количество вводимых символов
+// Проверка на количество вводимых символов
 function checkoutTextLength (text, minLength, maxLength) {
   return text.length >= minLength && text.length <= maxLength ;
 }
 
-// Рандомный выбор элемента массива
-const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
-
 //Обработчик событий по нажатию на клавишу Esc
 const isEscKeydown = (evt) => evt.key === 'Escape';
 
+//Сообщение об ошибке загрузки данных
+const showGetDataErrorMessage = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = 100;
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = 0;
+  alertContainer.style.top = 0;
+  alertContainer.style.right = 0;
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, 5000);
+};
+
 export {
-  getRandomNumber,
   checkoutTextLength,
-  getRandomArrayElement,
-  isEscKeydown
+  isEscKeydown,
+  showGetDataErrorMessage
 };
 
 

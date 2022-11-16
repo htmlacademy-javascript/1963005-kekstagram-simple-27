@@ -1,6 +1,8 @@
 import { checkoutTextLength, isEscKeydown } from './utils.js';
-import { resetPhotoSizeValue } from './upload-photo-size-scale.js';
+import { showSuccessMessage, showErrorMessage } from './upload-system-messages.js';
+import { resetPhotoSizeValue } from './photo-size-scale.js';
 import { resetPhotoEffects } from './add-photo-effect.js';
+import { sendPhotoData } from './api.js';
 
 const PHOTO_DESCRIPTION_MIN_LENGTH = 20;
 const PHOTO_DESCRIPTION_MAX_LENGTH = 140;
@@ -8,60 +10,41 @@ const PHOTO_DESCRIPTION_MAX_LENGTH = 140;
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const photoDescriptionField = document.querySelector('.text__description');
 const uploadForm = document.querySelector('.img-upload__form');
-const uploadFormCLoseButton = document.querySelector('#upload-cancel');
+const closeButton = document.querySelector('#upload-cancel');
 const uploadFormFileInput = document.querySelector('#upload-file');
+const uploadButton = document.querySelector('.img-upload__submit');
 
-const openUploadForm = () => {
-  document.body.classList.add('modal-open');
-  uploadOverlay.classList.remove('hidden');
-
-  const onUploadFormEscKeydown = (evt) => {
-    if (isEscKeydown(evt)) {
-      evt.preventDefault();
-      closeUploadForm();
-    }
-  };
-
-  const onInputEscKeydown = (evt) => {
-    if (isEscKeydown(evt)) {
-      evt.preventDefault();
-      evt.stopPropagation();
-    }
-  };
-
-  photoDescriptionField.addEventListener('keydown', onInputEscKeydown);
-
-  const onUploadFormCloseButtonClick = () => {
-    closeUploadForm();
-  };
-
-  uploadFormCLoseButton.addEventListener('click', onUploadFormCloseButtonClick);
-  document.addEventListener('keydown', onUploadFormEscKeydown);
-
-  function closeUploadForm() {
-    document.body.classList.remove('modal-open');
-    uploadOverlay.classList.add('hidden');
-
-    document.removeEventListener('keydown', onUploadFormEscKeydown);
-    uploadFormCLoseButton.removeEventListener('click', onUploadFormCloseButtonClick);
-
-    uploadForm.reset();
-    resetPhotoSizeValue();
-    resetPhotoEffects();
-  }
+const blockUploadButton = () => {
+  uploadButton.disabled = true;
+  uploadButton.textContent = 'Публикуем...';
 };
 
-const openPhotoUploadForm = () => {
-  uploadFormFileInput.addEventListener('change', openUploadForm);
+const unblockUploadButton = () => {
+  uploadButton.disabled = false;
+  uploadButton.textContent = 'Опубликовать';
+};
+
+const closeUploadForm = () => {
+  uploadOverlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onUploadFormEscKeydown);
+  uploadForm.reset();
+  resetPhotoSizeValue();
+  resetPhotoEffects();
 };
 
 //Валидация
-const validatePhotoDescriptionLength = (string) => checkoutTextLength(string, PHOTO_DESCRIPTION_MIN_LENGTH, PHOTO_DESCRIPTION_MAX_LENGTH);
+const validatePhotoDescriptionLength = (string) =>
+  checkoutTextLength(
+    string,
+    PHOTO_DESCRIPTION_MIN_LENGTH,
+    PHOTO_DESCRIPTION_MAX_LENGTH
+  );
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__text',
   errorTextParent: 'img-upload__text',
-  errorTextTag: 'div'
+  errorTextTag: 'div',
 });
 
 pristine.addValidator(
@@ -70,14 +53,47 @@ pristine.addValidator(
   'Длина комментария от 20 до 140 символов'
 );
 
+const setUserFormSubmit = (onSuccess) => {
+  resetPhotoEffects();
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
 
-uploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  if (pristine.validate()) {
-    uploadForm.submit();
-  }
+    const isValid = pristine.validate();
+
+    if (isValid) {
+      blockUploadButton();
+
+      sendPhotoData(
+        () => {
+          onSuccess();
+          showSuccessMessage();
+          unblockUploadButton();
+        },
+        () => {
+          showErrorMessage();
+          unblockUploadButton();
+        },
+        new FormData(evt.target)
+      );
+    }
+  });
+};
+
+uploadFormFileInput.addEventListener('change', () => {
+  uploadOverlay.classList.remove('hidden');
+  document.body.classList.add('modal-open');
 });
 
+closeButton.addEventListener('click', closeUploadForm);
+
+function onUploadFormEscKeydown (evt) {
+  if(isEscKeydown(evt) && !uploadOverlay.classList.contains('hidden')) {
+    closeUploadForm();
+  }
+}
+
+
 export {
-  openPhotoUploadForm
+  setUserFormSubmit,
+  closeUploadForm
 };
