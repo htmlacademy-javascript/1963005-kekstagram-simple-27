@@ -10,7 +10,7 @@ const PHOTO_DESCRIPTION_MAX_LENGTH = 140;
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const photoDescriptionField = document.querySelector('.text__description');
 const uploadForm = document.querySelector('.img-upload__form');
-const uploadFormCLoseButton = document.querySelector('#upload-cancel');
+const closeButton = document.querySelector('#upload-cancel');
 const uploadFormFileInput = document.querySelector('#upload-file');
 const uploadButton = document.querySelector('.img-upload__submit');
 
@@ -84,7 +84,7 @@ uploadFormFileInput.addEventListener('change', () => {
   document.body.classList.add('modal-open');
 });
 
-uploadFormCLoseButton.addEventListener('click', closeUploadForm);
+closeButton.addEventListener('click', closeUploadForm);
 
 function onUploadFormEscKeydown (evt) {
   if(isEscKeydown(evt) && !uploadOverlay.classList.contains('hidden')) {

@@ -6,11 +6,9 @@ const UPLOAD_PHOTO_URL = 'https://27.javascript.pages.academy/kekstagram-simple'
 export const getDataPhotosList = (onSuccess) => {
   fetch(GET_PHOTOS_URL)
     .then((response) => response.json())
-    .then((photos) => onSuccess(photos))
-    .catch((error) => {
-      if (error) {
-        showGetDataErrorMessage('Ошибка загрузки данных');
-      }
+    .then(onSuccess)
+    .catch(() => {
+      showGetDataErrorMessage('Ошибка загрузки данных');
     });
 };
 
@@ -29,7 +27,7 @@ export const sendPhotoData = (onSuccess, onError, form) => {
         });
       }
     })
-    .catch((error) => onError(error));
+    .catch(onError);
 };
 
 
