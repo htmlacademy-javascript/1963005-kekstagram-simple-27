@@ -8,14 +8,14 @@ const successTemplate = document.querySelector('#success').content.querySelector
 const successTemplateBlock = successTemplate.cloneNode(true);
 const successButton = successTemplateBlock.querySelector('.success__button');
 
-const closeSuccessMesage = () => {
+const onSuccessMesageClose = () => {
   successTemplateBlock.classList.add('hidden');
   document.removeEventListener('keydown', onSuccesMesageEscKeyDown);
 };
 
 const onOuterClickCloseSuccess = (evt) => {
   if(evt.target.classList.contains('success')) {
-    closeSuccessMesage();
+    onSuccessMesageClose();
   }
 };
 
@@ -23,14 +23,14 @@ const showSuccessMessage = () => {
   body.appendChild(successTemplateBlock);
   uploadForm.classList.add('hidden');
   successTemplateBlock.classList.remove('hidden');
-  successButton.addEventListener('click', closeSuccessMesage);
+  successButton.addEventListener('click', onSuccessMesageClose);
   document.addEventListener('keydown', onSuccesMesageEscKeyDown);
   successTemplateBlock.addEventListener('click', onOuterClickCloseSuccess);
 };
 
 function onSuccesMesageEscKeyDown (evt) {
   if (isEscKeydown(evt)) {
-    closeSuccessMesage();
+    onSuccessMesageClose();
   }
 }
 

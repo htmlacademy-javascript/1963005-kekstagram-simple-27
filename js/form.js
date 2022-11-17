@@ -9,6 +9,7 @@ const PHOTO_DESCRIPTION_MAX_LENGTH = 140;
 
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const photoDescriptionField = document.querySelector('.text__description');
+const uploadBlock = document.querySelector('.img-upload');
 const uploadForm = document.querySelector('.img-upload__form');
 const closeButton = document.querySelector('#upload-cancel');
 const uploadFormFileInput = document.querySelector('#upload-file');
@@ -24,7 +25,7 @@ const unblockUploadButton = () => {
   uploadButton.textContent = 'Опубликовать';
 };
 
-const closeUploadForm = () => {
+const onUploadFormClose = () => {
   uploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onUploadFormEscKeydown);
@@ -32,6 +33,8 @@ const closeUploadForm = () => {
   resetPhotoSizeValue();
   resetPhotoEffects();
 };
+
+document.addEventListener('keydown', onUploadFormEscKeydown);
 
 //Валидация
 const validatePhotoDescriptionLength = (string) =>
@@ -67,6 +70,7 @@ const setUserFormSubmit = (onSuccess) => {
         () => {
           onSuccess();
           showSuccessMessage();
+          uploadBlock.classList.add('hidden');
           unblockUploadButton();
         },
         () => {
@@ -84,16 +88,16 @@ uploadFormFileInput.addEventListener('change', () => {
   document.body.classList.add('modal-open');
 });
 
-closeButton.addEventListener('click', closeUploadForm);
+closeButton.addEventListener('click', onUploadFormClose);
 
 function onUploadFormEscKeydown (evt) {
   if(isEscKeydown(evt) && !uploadOverlay.classList.contains('hidden')) {
-    closeUploadForm();
+    onUploadFormClose();
   }
 }
 
 
 export {
   setUserFormSubmit,
-  closeUploadForm
+  onUploadFormClose
 };
