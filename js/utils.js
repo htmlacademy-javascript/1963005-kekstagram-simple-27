@@ -1,7 +1,5 @@
 // Проверка на количество вводимых символов
-function checkoutTextLength (text, minLength, maxLength) {
-  return text.length >= minLength && text.length <= maxLength ;
-}
+const checkoutTextLength = (text, minLength, maxLength) => text.length >= minLength && text.length <= maxLength;
 
 //Обработчик событий по нажатию на клавишу Esc
 const isEscKeydown = (evt) => evt.key === 'Escape';
