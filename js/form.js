@@ -9,7 +9,6 @@ const PHOTO_DESCRIPTION_MAX_LENGTH = 140;
 
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const photoDescriptionField = document.querySelector('.text__description');
-const uploadBlock = document.querySelector('.img-upload');
 const uploadForm = document.querySelector('.img-upload__form');
 const closeButton = document.querySelector('#upload-cancel');
 const uploadFormFileInput = document.querySelector('#upload-file');
@@ -33,8 +32,6 @@ const onUploadFormClose = () => {
   resetPhotoSizeValue();
   resetPhotoEffects();
 };
-
-document.addEventListener('keydown', onUploadFormEscKeydown);
 
 //Валидация
 const validatePhotoDescriptionLength = (string) =>
@@ -70,7 +67,6 @@ const setUserFormSubmit = (onSuccess) => {
         () => {
           onSuccess();
           showSuccessMessage();
-          uploadBlock.classList.add('hidden');
           unblockUploadButton();
         },
         () => {
@@ -86,6 +82,7 @@ const setUserFormSubmit = (onSuccess) => {
 uploadFormFileInput.addEventListener('change', () => {
   uploadOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
+  document.addEventListener('keydown', onUploadFormEscKeydown);
 });
 
 closeButton.addEventListener('click', onUploadFormClose);
@@ -95,7 +92,6 @@ function onUploadFormEscKeydown (evt) {
     onUploadFormClose();
   }
 }
-
 
 export {
   setUserFormSubmit,
