@@ -1,7 +1,7 @@
 import { isEscKeydown } from './utils.js';
 
 const body = document.body;
-const uploadForm = document.querySelector('.img-upload__form');
+const uploadOverlay = document.querySelector('.img-upload__overlay');
 
 //Сообщение об успешной загрузке
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
@@ -21,7 +21,6 @@ const onOuterClickCloseSuccess = (evt) => {
 
 const showSuccessMessage = () => {
   body.appendChild(successTemplateBlock);
-  uploadForm.classList.add('hidden');
   successTemplateBlock.classList.remove('hidden');
   successButton.addEventListener('click', onSuccessMesageClose);
   document.addEventListener('keydown', onSuccesMesageEscKeyDown);
@@ -41,7 +40,7 @@ const errorButton = errorTemplateBlock.querySelector('.error__button');
 
 const closeErrorMesage = () => {
   errorTemplateBlock.classList.add('hidden');
-  uploadForm.classList.remove('hidden');
+  uploadOverlay.classList.remove('hidden');
   document.removeEventListener('keydown', onErrorMesageEscKeyDown);
 };
 
@@ -53,14 +52,14 @@ const onOuterClickCloseError = (evt) => {
 
 const showErrorMessage = () => {
   body.appendChild(errorTemplateBlock);
-  uploadForm.classList.add('hidden');
+  uploadOverlay.classList.add('hidden');
   errorTemplateBlock.classList.remove('hidden');
   errorButton.addEventListener('click', closeErrorMesage);
   document.addEventListener('keydown', onErrorMesageEscKeyDown);
   errorTemplateBlock.addEventListener('click', onOuterClickCloseError);
 };
 
-function onErrorMesageEscKeyDown (evt) {
+function onErrorMesageEscKeyDown(evt) {
   if (isEscKeydown(evt)) {
     closeErrorMesage();
   }
